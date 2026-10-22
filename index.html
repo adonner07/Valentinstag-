@@ -2,12 +2,1549 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Für dich</title>
+<meta name="description" content="Öffne mich, wenn du kurz Zeit hast.">
+<meta property="og:title" content="Für dich">
+<meta property="og:description" content="Öffne mich, wenn du kurz Zeit hast.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta name="theme-color" content="#0F3A40">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&family=Bowlby+One&family=Courier+Prime:wght@400;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  html, body { height: 100%; margin: 0; }
-  body { display: grid; place-items: center; background: #2b0a14; color: #ff5c7a; font: 3rem/1 system-ui, sans-serif; }
+:root{
+  --counter:#0F3A40;--counter-hi:#1C5A5F;--on-counter:#E8F1EF;--on-counter-muted:#BFD5D2;
+  --paper:#FBF9F4;--paper-back:#F7F5EE;--red:#E4402B;--red-btn:#C3341F;--yellow:#F5C518;
+  --ink:#1D2147;--ink-muted:#4A4E70;--pen:#2B3FA0;
+  --silver-hi:#D7DADF;--silver:#C9CCD1;--silver-lo:#9AA0A8;--emboss:#7D838C;
+  --mint:#7FE0D0;--lilac:#B9A6FF;--focus:#F5C518;
+  --hole:var(--counter);
+  --f-display:"Bowlby One","Arial Black",Impact,sans-serif;
+  --f-body:"Archivo Narrow","Arial Narrow","Roboto Condensed",sans-serif;
+  --f-mono:"Courier Prime","Courier New",monospace;
+  --f-hand:Kalam,"Segoe Print","Bradley Hand",cursive;
+  --pad:20px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--counter:#0A2A2F;--counter-hi:#14474C;--paper:#F1EEE6;--paper-back:#ECE9E0}
+}
+:root[data-theme="dark"]{--counter:#0A2A2F;--counter-hi:#14474C;--paper:#F1EEE6;--paper-back:#ECE9E0}
+@supports (color:color-mix(in srgb,red,blue)){:root{--hole:color-mix(in srgb,var(--counter) 72%,var(--counter-hi))}}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--counter);overflow-x:hidden;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  margin:0;overflow-x:clip;color:var(--on-counter);
+  font:400 17px/1.45 var(--f-body);
+  background-color:var(--counter);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 50% -10%,var(--counter-hi),var(--counter) 70%);
+  background-size:220px 220px,100% 900px;
+  background-repeat:repeat,no-repeat;
+  background-position:0 0,50% 0;
+  background-blend-mode:overlay,normal;
+  padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(28px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));
+}
+html.static *,html.static *::before,html.static *::after{transition:none!important}
+button,a,summary,label,.field{-webkit-tap-highlight-color:transparent}
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.ticket :focus-visible{box-shadow:0 0 0 2px var(--ink)}
+[tabindex="-1"]:focus,[tabindex="-1"]:focus-visible{outline:none;box-shadow:none}
+.vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+p{margin:0 0 10px}
+
+.stage{max-width:452px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+.counter-label{margin:6px 0 0;font:400 12px/1.4 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--on-counter-muted);text-align:center}
+.welcome{width:min(420px,100%);margin:0 0 12px;padding:10px 12px 2px;border:1px dashed rgba(232,241,239,.35);border-radius:6px;font-size:15px;line-height:1.4;color:var(--on-counter);text-align:center}
+.welcome p{margin:0}
+.welcome .textbtn{color:var(--on-counter)}
+
+/* buttons */
+.btn{appearance:none;-webkit-appearance:none;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;margin:0;padding:12px 18px;border-radius:6px;font:700 18px/1.2 var(--f-body);text-align:center;text-decoration:none;cursor:pointer;touch-action:manipulation;transition:transform .08s ease-out,box-shadow .08s ease-out}
+.btn-primary{background:var(--red-btn);color:#fff;border:2px solid var(--red-btn);box-shadow:0 3px 0 #7A2213}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 1px 0 #7A2213}
+.btn-secondary{background:transparent;color:var(--ink);border:2px solid var(--ink);font-size:16px;min-height:48px;box-shadow:0 3px 0 rgba(29,33,71,.22)}
+.btn-secondary:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(29,33,71,.22)}
+.btn svg{width:22px;height:22px;flex:none}
+.btn + .btn{margin-top:12px}
+.textbtn{appearance:none;-webkit-appearance:none;background:none;border:0;margin:0;padding:0 10px;min-height:48px;font:600 16px/1.2 var(--f-body);color:var(--ink);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;cursor:pointer;touch-action:manipulation;border-radius:4px}
+
+/* ticket */
+.ticket-wrap{--tilt:-1deg;position:relative;width:min(420px,100%);margin:14px auto 0;transform:rotate(var(--tilt))}
+@media (max-width:559px){.ticket-wrap{--tilt:-.45deg}}
+.ticket-flip{position:relative;padding-top:8px}
+.ticket-shadow{position:absolute;inset:18px 0 0 0;border-radius:4px;box-shadow:0 18px 30px rgba(0,0,0,.38)}
+.ticket{--sheet:var(--paper);position:relative;color-scheme:light;color:var(--ink);background:var(--sheet);border-radius:0 0 4px 4px}
+.ticket::before{content:"";position:absolute;left:0;right:0;top:-8px;height:8px;background:var(--sheet);
+  -webkit-mask:conic-gradient(from 135deg at 50% 0,#0000 0,#000 1deg 89deg,#0000 90deg) 50% 0/16px 8px repeat-x;
+  mask:conic-gradient(from 135deg at 50% 0,#0000 0,#000 1deg 89deg,#0000 90deg) 50% 0/16px 8px repeat-x}
+.ticket.is-back{--sheet:var(--paper-back);background:
+  linear-gradient(rgba(29,33,71,.07) 1px,transparent 1px) 0 0/100% 20px,
+  linear-gradient(90deg,rgba(29,33,71,.07) 1px,transparent 1px) 0 0/20px 100%,
+  var(--paper-back)}
+.layer{position:absolute;pointer-events:none}
+.perf-l{left:0;top:0;bottom:0;width:10px;z-index:2;background:radial-gradient(circle 3px at 5px 8px,var(--hole) 2.5px,transparent 3px) 0 0/10px 16px repeat-y}
+.holo{top:0;bottom:0;right:6px;width:10px;z-index:0;opacity:.55;
+  background:linear-gradient(115deg,#F5C518,#7FE0D0,#E4402B,#B9A6FF,#F5C518) 0 var(--hy,30%)/100% 300%}
+.holo::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.42) 0 1px,transparent 1px 2px)}
+.crease{left:0;right:0;top:0;height:min(680px,100%);z-index:0;background:linear-gradient(135deg,transparent 48%,rgba(0,0,0,.05) 50%,rgba(255,255,255,.45) 51%,transparent 53%)}
+.side{position:relative;z-index:1;padding:22px var(--pad) 26px}
+@media (min-width:440px){:root{--pad:28px}.holo{right:14px}}
+
+.guil-layer{position:absolute;inset:0;overflow:hidden;z-index:-1;pointer-events:none}
+.guil{position:absolute;fill:none;stroke:var(--red);stroke-width:.6;opacity:.18}
+.g-r1{top:-8px;left:calc(50% - 100px)}
+.g-r2{top:410px;left:-118px}
+.g-r3{bottom:24px;right:-52px}
+.g-waves{top:58px;left:0;width:100%;height:64px}
+
+/* type */
+.display{font-family:var(--f-display);font-weight:400;line-height:1.05}
+.red-type{color:var(--red);text-shadow:1.5px 1px 0 var(--yellow)}
+.caps{text-transform:uppercase;letter-spacing:.06em}
+.nowrap{white-space:nowrap}
+@media (max-width:479px){.back .kicker .kdot{display:none}.back .kicker .nowrap{display:block}}
+.kicker{margin:0;font:700 13px/1.35 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.label{margin:0 0 6px;font:700 13px/1.35 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted)}
+.muted{color:var(--ink-muted);font-size:15px}
+
+/* S1 header */
+.head{display:grid;grid-template-columns:1fr auto;grid-template-areas:"kicker note" "title title" "draw draw" "info info" "coin coin";column-gap:10px;align-items:start}
+.head .kicker{grid-area:kicker;padding-top:4px}
+.title{grid-area:title;margin:8px 0 6px;font-size:clamp(34px,11vw,48px);line-height:1;letter-spacing:.01em;text-transform:uppercase}
+.scribble{grid-area:note;position:relative;margin:0 2px 0 0;max-width:122px;padding-bottom:4px;font:400 18px/1.12 var(--f-hand);color:var(--pen);text-align:center;transform:rotate(5deg);transform-origin:50% 0}
+.scribble .arrow{position:absolute;left:-30px;bottom:-26px;width:50px;height:36px;overflow:visible;fill:none;stroke:var(--pen);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+@media (min-width:440px){.scribble{max-width:150px;font-size:19px}}
+.draw{grid-area:draw;margin:0 0 6px;font-weight:600;font-size:17px}
+.info{grid-area:info;margin:4px 0 0;font:400 13.5px/1.35 var(--f-mono);letter-spacing:.04em}
+.info > div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:6px 0;border-bottom:1px dotted rgba(29,33,71,.38)}
+.info dt{margin:0}
+.info dd{margin:0;font-weight:700;text-align:right;white-space:nowrap}
+.info .hand{display:inline-block;font:400 21px/1 var(--f-hand);color:var(--pen);transform:rotate(-3deg);letter-spacing:0}
+.coin-btn{grid-area:coin;justify-self:start;appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;gap:12px;min-height:64px;margin:20px 0 0;padding:0 20px 0 0;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);font:700 18px/1.2 var(--f-body);cursor:pointer;touch-action:manipulation;box-shadow:0 3px 0 rgba(29,33,71,.22)}
+.coin-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(29,33,71,.22)}
+.coin-btn .coin{width:64px;height:64px;margin:-2px 0 -2px -2px;flex:none}
+.coin .c-face{fill:var(--yellow);stroke:var(--ink);stroke-width:2.5}
+.coin .c-ring{fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:1.4 2.4}
+.coin .c-shine{fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;opacity:.65}
+.coin .c-num{font:400 17px var(--f-display);fill:var(--ink)}
+.coin .c-txt{font:700 10px var(--f-mono);letter-spacing:1px;fill:var(--ink)}
+.coin-deco{position:absolute;top:-16px;right:-10px;width:44px;height:44px;z-index:5;pointer-events:none;transform:rotate(15deg)}
+
+/* S2 rules + fields */
+.rules{margin-top:28px}
+.rule-main{margin:0 0 2px;font-weight:700}
+.rule-sub{margin:0 0 4px}
+#scratchHint{margin:0;transition:opacity .25s}
+#scratchHint.gone{opacity:0}
+.fields{position:relative;display:grid;grid-template-columns:1fr;gap:12px;margin:12px 0 0}
+.field{position:relative;height:96px;border-radius:8px;background:var(--paper);box-shadow:inset 0 0 0 1.5px rgba(29,33,71,.22);touch-action:manipulation}
+.fields,.field,.field .prize,.coin-deco{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.prize{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 14px}
+.heart{flex:none;width:42px;height:40px;overflow:visible}
+.heart .hy{fill:var(--yellow)}
+.heart .hr{fill:var(--red)}
+.pw{font:400 20px/1.05 var(--f-display);text-transform:uppercase;letter-spacing:.01em;color:var(--ink)}
+.silver{position:absolute;inset:0;display:block;width:100%;height:100%;border-radius:8px;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+@media (hover:hover) and (pointer:fine){
+  .silver{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23F5C518' stroke='%231D2147' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%231D2147' stroke-width='1' stroke-dasharray='1 2'/%3E%3C/svg%3E") 16 16,pointer}
+}
+@media (min-width:560px){
+  .fields{grid-template-columns:repeat(3,1fr)}
+  .fields .field{height:auto;aspect-ratio:1/1}
+  .fields .prize{flex-direction:column;gap:6px;padding:8px;text-align:center}
+  .fields .heart{width:34px;height:32px}
+  .fields .pw{font-size:15px}
+}
+.crumbs{position:absolute;left:0;top:0;z-index:4;pointer-events:none}
+.hint{min-height:34px;margin:8px 0 0;font:400 21px/1.3 var(--f-hand);color:var(--pen);transform:rotate(-1.5deg);transform-origin:0 50%}
+@media (max-width:419px){.hint{min-height:56px}}
+#revealAll{margin-left:-10px}
+
+/* stamps */
+.stamp{position:absolute;left:50%;top:50%;z-index:6;overflow:visible;pointer-events:none;mix-blend-mode:multiply;opacity:.9;visibility:hidden}
+.stamp.on{visibility:visible}
+.win-stamp{width:104%;top:67.3%;color:var(--red);transform:translate(-50%,-50%) rotate(-8deg)}
+@media (min-width:560px){.win-stamp{width:88%;top:24%}}
+.redeem-stamp{width:min(160px,50%);left:77%;top:calc(100% - 46px);color:var(--ink);transform:translate(-50%,-50%) rotate(12deg)}
+.st-display{font-family:var(--f-display)}
+.st-mono{font-family:var(--f-mono);font-weight:700}
+.drops circle{transform-box:fill-box;transform-origin:50% 50%;transform:scale(0)}
+.drops.on circle{transform:scale(1)}
+
+/* S4 notice */
+.unfold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s cubic-bezier(.2,.8,.3,1)}
+.unfold.open{grid-template-rows:1fr}
+.unfold-inner{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s .6s}
+.unfold.open .unfold-inner{visibility:visible;transition:visibility 0s}
+.unfold.opened .unfold-inner{overflow:visible}
+.perf-line{position:relative;margin:26px calc(-1 * var(--pad)) 16px;text-align:center;line-height:1}
+.perf-line::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed rgba(29,33,71,.35)}
+.perf-line span{position:relative;display:inline-block;padding:0 10px;background:var(--paper);font:700 12.5px/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted)}
+.win-title{margin:0 0 10px;font-size:27px;line-height:1.08;scroll-margin-top:16px}
+.win-lead{margin:0 0 4px;font-weight:700;font-size:19px;line-height:1.35}
+.win-date{margin:0 0 16px;font:700 14px/1.4 var(--f-mono);letter-spacing:.04em}
+.bonus-wrap{display:flow-root}
+.bonus-col{float:right;width:84px;margin:0 0 8px 14px}
+.bonus-label{margin:0 0 4px;font:700 12.5px/1.2 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;text-align:center;color:var(--ink-muted)}
+.field.bonus{width:84px;height:84px}
+.bonus .prize{flex-direction:column;gap:1px;padding:4px;text-align:center}
+.lips{width:40px;height:24px;flex:none}
+.lips .lip{fill:var(--red)}
+.lips .lc{fill:none;stroke:var(--paper);stroke-width:.9;stroke-linecap:round;opacity:.75}
+.bonus .k1{font:700 14px/1.1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--red-btn)}
+.bonus .k2{font:400 12px/1.1 var(--f-mono);color:var(--ink)}
+.bonus-note{clear:both;margin:0 4px 6px 0;text-align:right;font:400 20px/1.25 var(--f-hand);color:var(--pen);transform:rotate(-4deg);transform-origin:100% 50%}
+.terms{margin:14px 0 4px}
+.terms summary{display:inline-flex;align-items:center;gap:9px;min-height:48px;cursor:pointer;list-style:none;font:400 14px/1.3 var(--f-mono);letter-spacing:.04em;text-decoration:underline;text-underline-offset:3px;border-radius:4px;touch-action:manipulation}
+.terms summary::-webkit-details-marker{display:none}
+.terms summary::before{content:"";flex:none;width:0;height:0;border-left:6px solid currentColor;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;transition:transform .2s}
+.terms[open] summary::before{transform:rotate(90deg)}
+.terms-body{padding:2px 0 6px;font:400 13px/1.45 var(--f-mono);letter-spacing:.02em}
+.terms-body p{margin:0 0 7px}
+.ask{margin:20px 0 16px;font-size:24px;line-height:1.15;color:var(--ink)}
+.notice{margin-top:14px}
+.notice.on{padding:12px 14px;border:1.5px solid var(--red);border-radius:3px;background:rgba(255,255,255,.55)}
+.notice .nh{margin:0 0 6px;font:700 13px/1.3 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--red-btn)}
+.notice .nb{margin:0}
+.yes-line{margin:2px 0 10px;font:400 24px/1.25 var(--f-hand);color:var(--pen);transform:rotate(-2deg);transform-origin:0 50%;scroll-margin-top:16px}
+
+/* S6 back */
+.back-title{margin:4px 0 10px;font-size:26px;line-height:1.08;color:var(--ink);scroll-margin-top:16px}
+.redeem{margin-top:6px}
+.form-body{position:relative}
+.dayset{margin:14px 0 0;padding:0;border:0;min-width:0}
+.dayset legend{padding:0;margin:0 0 4px;font:700 13px/1.35 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted)}
+.checks{display:grid;grid-template-columns:1fr;column-gap:12px}
+@media (min-width:560px){.checks{grid-template-columns:1fr 1fr}}
+.chk{position:relative;display:flex;align-items:center;gap:12px;min-height:48px;padding:5px 4px;cursor:pointer;font-size:17px;line-height:1.25;touch-action:manipulation}
+.chk input{position:absolute;left:4px;top:50%;width:30px;height:30px;margin:-15px 0 0;opacity:0;cursor:pointer}
+.box{flex:none;display:block;width:30px;height:30px;border-radius:4px}
+.box svg{display:block;width:30px;height:30px;overflow:visible}
+.box .sq{fill:rgba(255,255,255,.75);stroke:var(--ink);stroke-width:1.8;stroke-linejoin:round}
+.box .x{fill:none;stroke:var(--pen);stroke-width:2.8;stroke-linecap:round;stroke-dasharray:26;stroke-dashoffset:26;opacity:0;transition:opacity .15s ease-out,stroke-dashoffset 0s linear .15s}
+.chk input:checked + .box .x{stroke-dashoffset:0;opacity:1;transition:stroke-dashoffset .16s ease-out,opacity 0s}
+.chk input:checked + .box .x2{transition:stroke-dashoffset .16s ease-out .06s,opacity 0s .06s}
+.chk input:focus-visible + .box{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 2px var(--ink)}
+.is-locked .chk,.is-locked .chk input{cursor:default}
+.quip{min-height:30px;margin:6px 0 0 6px;font:400 20px/1.3 var(--f-hand);color:var(--pen);transform:rotate(-1.5deg);transform-origin:0 50%}
+.joker{margin-top:16px}
+.joker label{display:block;margin:2px 0 8px;font-weight:600}
+.joker textarea{display:block;width:100%;min-height:92px;margin:0;padding:0 6px;border:0;border-bottom:1.5px solid rgba(29,33,71,.45);border-radius:0;background:repeating-linear-gradient(to bottom,transparent 0 29px,rgba(29,33,71,.15) 29px 30px);background-attachment:local;font:400 17px/30px var(--f-body);color:var(--ink);resize:vertical;-webkit-appearance:none;appearance:none}
+.joker textarea::placeholder{color:#5A5E7E;opacity:1}
+.joker textarea:disabled{color:var(--ink);-webkit-text-fill-color:var(--ink);opacity:1}
+.wcount{margin:4px 0 0;text-align:right;font:400 13px/1.3 var(--f-mono);letter-spacing:.04em;color:var(--ink-muted)}
+#redeemBtn{margin-top:18px}
+
+/* S8 slip */
+.cut{position:relative;display:flex;align-items:center;justify-content:center;height:26px;margin:30px calc(-1 * var(--pad)) 0;font:400 12.5px/1 var(--f-mono);letter-spacing:.04em;color:var(--ink-muted)}
+.cut::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed rgba(29,33,71,.38)}
+.cut span{position:relative;padding:0 8px;background:var(--paper-back)}
+.cut svg{position:absolute;left:calc(var(--pad) - 6px);top:50%;width:22px;height:22px;margin-top:-11px;padding:1px;background:var(--paper-back);color:var(--ink);fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.slip{margin:14px auto 0;max-width:340px;padding:16px 16px 14px;background:var(--paper);border:1px solid rgba(29,33,71,.16);box-shadow:0 10px 18px -10px rgba(29,33,71,.35);font:400 13.5px/1.45 var(--f-mono);letter-spacing:.02em;color:var(--ink)}
+.slip-h{margin:0 0 10px;text-align:center;font:700 13.5px/1.35 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;scroll-margin-top:16px}
+.slip-rows{margin:0}
+.srow{display:flex;align-items:flex-start;padding:2px 0}
+.srow dt{display:flex;flex:1 0 auto;margin:0;white-space:nowrap}
+.srow dt::after{content:"";flex:1 1 auto;min-width:14px;margin:0 6px .38em;border-bottom:1px dotted currentColor;align-self:flex-end}
+.srow dd{flex:0 1 auto;min-width:0;max-width:66%;margin:0;text-align:right;font-weight:700;overflow-wrap:anywhere}
+.srow dd > span{display:block}
+.srow dd > span + span{margin-top:5px}
+.srow dd > span:not(:only-child)::before{content:"×\00a0";content:"×\00a0" / "";font-weight:400}
+.slip-foot{margin:12px 0 8px;text-align:center;font-weight:700}
+.barcode{display:flex;flex-direction:column;align-items:center;gap:4px}
+.barcode svg{display:block;width:220px;max-width:100%;height:38px;fill:var(--ink)}
+.barcode span{font:400 13px/1 var(--f-mono);letter-spacing:.18em}
+
+/* S9 finale */
+.finale{margin-top:26px;text-align:center}
+.love{display:inline-block;margin:0;padding:0 8px;color:var(--pen);transform:rotate(-2deg)}
+.love-text{display:inline-block;padding:0 8px;font:700 40px/1.25 var(--f-hand)}
+.love-line{display:block;width:100%;height:16px;margin-top:-10px;overflow:visible}
+.love-line path{fill:none;stroke:var(--pen);stroke-width:2.6;stroke-linecap:round}
+.finale-rest{text-align:left}
+.finale-text{margin:16px 0 16px}
+.copybox{margin-top:12px}
+.copybox textarea{display:block;width:100%;min-height:210px;margin:0;padding:10px;border:1.5px solid var(--ink);border-radius:4px;background:#fff;font:400 16px/1.4 var(--f-body);color:var(--ink)}
+.copybox p{margin:6px 0 0;font-size:15px;color:var(--ink-muted)}
+.textrow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:8px;color:var(--ink-muted)}
+@media (max-width:419px){.textrow{flex-direction:column}.textrow .sep{display:none}}
+
+/* counter note + toast */
+.cd-note{position:relative;width:min(290px,88%);margin:38px auto 8px;padding:22px 18px 14px;background:var(--paper);color-scheme:light;border-radius:2px;text-align:center;transform:rotate(3deg);box-shadow:0 8px 16px rgba(0,0,0,.32)}
+.cd-note .tape{position:absolute;left:50%;top:-11px;width:86px;height:24px;margin-left:-43px;transform:rotate(-4deg);background:rgba(255,255,255,.45);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.cd-note .l1{margin:0;font:400 22px/1.3 var(--f-hand);color:var(--pen);text-wrap:balance}
+.cd-note .num{display:inline-block;padding:0 7px;margin:0 1px;font:700 20px/1 var(--f-mono);letter-spacing:.02em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30' preserveAspectRatio='none'%3E%3Cpath d='M33 3.5C19 2 5 6 3.5 14.5S16 28 32 27s25-6 24.5-14S44 1.5 27 3.8' fill='none' stroke='%232B3FA0' stroke-width='1.6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;padding-top:5px;padding-bottom:5px}
+.cd-note .l2{margin:6px 0 0;font:400 17px/1.3 var(--f-hand);color:var(--pen);text-wrap:balance}
+.toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));z-index:50;max-width:calc(100vw - 32px);padding:12px 18px;border-radius:8px;background:var(--ink);color:#fff;font:600 16px/1.3 var(--f-body);text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;pointer-events:none;transform:translateX(-50%);transition:opacity .2s,transform .2s}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.toast:empty{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;scroll-behavior:auto!important}
+}
 </style>
+<noscript><style>.silver{background:#C9CCD1}</style></noscript>
 </head>
-<body>&#9829;</body>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="hp" d="M16 29C7 22.4 1.5 16.9 1.5 10.4A7.6 7.6 0 0 1 16 6.9 7.6 7.6 0 0 1 30.5 10.4C30.5 16.9 25 22.4 16 29Z"/>
+  </defs>
+</svg>
+
+<main class="stage">
+  <div class="welcome" id="welcome" hidden>
+    <p>Schön, dass du wieder da bist. Dein Los ist schon eingelöst.</p>
+    <button type="button" class="textbtn js-restart">Nochmal von vorn rubbeln</button>
+  </div>
+  <p class="counter-label">Annahmestelle für Herzensangelegenheiten</p>
+
+  <div class="ticket-wrap" id="wrap">
+    <div class="ticket-flip" id="flip">
+      <div class="ticket-shadow" aria-hidden="true"></div>
+      <div class="ticket" id="ticket">
+        <div class="layer perf-l" aria-hidden="true"></div>
+        <div class="layer holo" id="holo" aria-hidden="true"></div>
+        <div class="layer crease" aria-hidden="true"></div>
+
+        <!-- Vorderseite -->
+        <div class="side front" id="front">
+          <div class="guil-layer" id="guil" aria-hidden="true"></div>
+
+          <header class="head">
+            <p class="kicker">Sonderziehung zum Valentinstag</p>
+            <h1 class="display red-type title">Glückslos</h1>
+            <p class="scribble">hab extra das gute Los genommen<svg class="arrow" viewBox="0 0 50 36" aria-hidden="true" focusable="false"><path d="M44 2C40 14 30 24 7 30"/><path d="M14 24.5 6.5 30.3 15.5 33"/></svg></p>
+            <p class="draw">Ziehung: Sonntag, 14.&nbsp;Februar 2027</p>
+            <dl class="info">
+              <div><dt>Ausgestellt für:</dt><dd><span class="hand">dich</span></dd></div>
+              <div><dt>Einsatz:</dt><dd>0,00&nbsp;€</dd></div>
+              <div><dt>Gewinnchance:</dt><dd>1&nbsp;:&nbsp;1</dd></div>
+              <div><dt>Los-Nr.:</dt><dd>1402-2027-ICH-DICH</dd></div>
+              <div id="ticketCountdown"><dt>Einlösung in:</dt><dd>115&nbsp;Tagen</dd></div>
+            </dl>
+            <button type="button" class="coin-btn" id="coinBtn">
+              <svg class="coin" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <circle class="c-face" cx="32" cy="32" r="29.5"/>
+                <circle class="c-ring" cx="32" cy="32" r="24"/>
+                <path class="c-shine" d="M15 22A19 19 0 0 1 24 14"/>
+                <text class="c-num" x="32" y="33" text-anchor="middle">1</text>
+                <text class="c-txt" x="32" y="45" text-anchor="middle">KUSS</text>
+              </svg>
+              <span>Münze nehmen &amp; rubbeln</span>
+            </button>
+          </header>
+
+          <section class="rules" aria-labelledby="rulesTitle">
+            <h2 class="label" id="rulesTitle" tabindex="-1">Spielregel</h2>
+            <p class="rule-main">Drei gleiche Symbole = <span class="caps">Hauptgewinn</span>.</p>
+            <p class="rule-sub">Viel Glück. (Brauchst du nicht.)</p>
+            <p class="muted" id="scratchHint">Mit dem Finger übers Silber rubbeln.</p>
+
+            <div class="fields" id="fields">
+              <div class="field" id="f1" role="button" tabindex="0" aria-label="Rubbelfeld 1 von 3 – Enter rubbelt ein Drittel frei">
+                <div class="prize" aria-hidden="true">
+                  <svg class="heart" viewBox="0 0 34 32" focusable="false"><use class="hy" href="#hp" transform="translate(1.5 1)"/><use class="hr" href="#hp"/></svg>
+                  <span class="pw">ein ganzer Tag</span>
+                </div>
+                <canvas class="silver" aria-hidden="true"></canvas>
+              </div>
+              <div class="field" id="f2" role="button" tabindex="0" aria-label="Rubbelfeld 2 von 3 – Enter rubbelt ein Drittel frei">
+                <div class="prize" aria-hidden="true">
+                  <svg class="heart" viewBox="0 0 34 32" focusable="false"><use class="hy" href="#hp" transform="translate(1.5 1)"/><use class="hr" href="#hp"/></svg>
+                  <span class="pw">nur wir zwei</span>
+                </div>
+                <canvas class="silver" aria-hidden="true"></canvas>
+              </div>
+              <div class="field" id="f3" role="button" tabindex="0" aria-label="Rubbelfeld 3 von 3 – Enter rubbelt ein Drittel frei">
+                <div class="prize" aria-hidden="true">
+                  <svg class="heart" viewBox="0 0 34 32" focusable="false"><use class="hy" href="#hp" transform="translate(1.5 1)"/><use class="hr" href="#hp"/></svg>
+                  <span class="pw">mit mir</span>
+                </div>
+                <canvas class="silver" aria-hidden="true"></canvas>
+              </div>
+              <canvas class="crumbs" id="crumbs" aria-hidden="true"></canvas>
+
+              <svg class="stamp win-stamp" id="winStamp" viewBox="-24 -26 348 152" aria-hidden="true" focusable="false">
+                <defs>
+                  <filter id="frayWin" x="-4%" y="-8%" width="108%" height="116%">
+                    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
+                    <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+                  </filter>
+                </defs>
+                <g filter="url(#frayWin)">
+                  <rect x="3" y="3" width="294" height="94" rx="14" fill="none" stroke="currentColor" stroke-width="5"/>
+                  <rect x="11" y="11" width="278" height="78" rx="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  <text class="st-display" x="150" y="59" text-anchor="middle" font-size="34" textLength="248" lengthAdjust="spacingAndGlyphs" fill="currentColor">HAUPTGEWINN</text>
+                  <text class="st-mono" x="150" y="80" text-anchor="middle" font-size="12.5" letter-spacing="1.5" fill="currentColor">GEPRÜFT · 3 HERZEN</text>
+                  <use href="#hp" fill="currentColor" transform="translate(49 70) scale(.34)"/>
+                  <use href="#hp" fill="currentColor" transform="translate(240 70) scale(.34)"/>
+                </g>
+                <g class="drops" fill="currentColor">
+                  <circle cx="-13" cy="20" r="3.2"/><circle cx="-8" cy="72" r="2.2"/><circle cx="42" cy="-13" r="2.6"/>
+                  <circle cx="128" cy="-17" r="4"/><circle cx="214" cy="-11" r="2.2"/><circle cx="312" cy="28" r="3.4"/>
+                  <circle cx="316" cy="86" r="2"/><circle cx="262" cy="114" r="4.4"/><circle cx="150" cy="118" r="2.1"/>
+                  <circle cx="86" cy="114" r="2.8"/>
+                </g>
+              </svg>
+            </div>
+
+            <p class="hint" id="hint" aria-live="polite"></p>
+            <button type="button" class="textbtn" id="revealAll">Ohne Rubbeln aufdecken</button>
+          </section>
+
+          <div class="unfold" id="notice">
+            <div class="unfold-inner" id="noticeInner">
+              <section class="win" aria-labelledby="winTitle">
+                <div class="perf-line"><span>Gewinnbenachrichtigung</span></div>
+                <h2 class="display red-type win-title" id="winTitle" tabindex="-1">Herzlichen Glückwunsch!</h2>
+                <p class="win-lead">Du hast gewonnen: einen ganzen Valentinstag mit mir.</p>
+                <p class="win-date">Sonntag, 14.&nbsp;Februar 2027</p>
+
+                <div class="bonus-wrap">
+                  <div class="bonus-col">
+                    <p class="bonus-label" aria-hidden="true">Bonus</p>
+                    <div class="field bonus" id="bonus" role="button" tabindex="0" aria-label="Bonusfeld freirubbeln">
+                      <div class="prize" aria-hidden="true">
+                        <svg class="lips" viewBox="0 0 48 28" focusable="false">
+                          <path class="lip" d="M2 13C7 6 13 2.5 19 5.5c2 1 3.4 1.5 5 0 6-3.5 12.5.5 22 7.5-7 1.5-14 2-22 1.2C16 15 9 14.6 2 13Z"/>
+                          <path class="lip" d="M2.5 14.8c7 .9 14 1.6 21.5 1.6s15-.7 21.5-1.6C41 22 33 26 24 26S7 22 2.5 14.8Z"/>
+                          <path class="lc" d="M10 9.5l1.5 2.5M16 7.5l1 3.5M31 7.2l-1 3.3M37.5 9.2 36 11.7M12 18.5l1 3M19 19.5l.5 4M29 19.5l-.5 4M36 18.5l-1 3"/>
+                        </svg>
+                        <span class="k1">1 Kuss</span>
+                        <span class="k2">sofort einlösbar</span>
+                      </div>
+                      <canvas class="silver" aria-hidden="true"></canvas>
+                    </div>
+                  </div>
+                  <p>Ich hätte dir das auch einfach schreiben können. Aber dann hättest du nicht rubbeln dürfen.</p>
+                  <p class="bonus-note" id="bonusNote" hidden>Gilt auch schon vor dem 14.02.</p>
+                </div>
+
+                <details class="terms" id="terms">
+                  <summary>Teilnahmebedingungen lesen</summary>
+                  <div class="terms-body">
+                    <p>§1 Der Gewinn ist nicht übertragbar und nicht in bar auszahlbar.</p>
+                    <p>§2 Umtausch ausgeschlossen. Verlängerung jederzeit möglich.</p>
+                    <p>§3 Die Gewinnerin verpflichtet sich zu guter Laune. Ich bring die warmen Hände mit.</p>
+                    <p>§4 Was genau wir machen, bestimmst du (siehe Rückseite).</p>
+                    <p>§5 Nebenwirkungen: Herzklopfen, Grinsen ohne Grund. Beides ist normal.</p>
+                    <p>§6 Es gilt: Hauptsache zusammen.</p>
+                  </div>
+                </details>
+
+                <h3 class="display ask">Also, ganz offiziell:<br>Willst du meine Valentine sein?</h3>
+
+                <div id="answerZone">
+                  <button type="button" class="btn btn-primary" id="yesBtn">Ja, ich nehme den Gewinn an</button>
+                  <button type="button" class="btn btn-secondary" id="noBtn" aria-describedby="noNotice">Gewinn ablehnen</button>
+                  <div class="notice" id="noNotice" aria-live="polite"></div>
+                </div>
+
+                <div id="yesBlock" hidden>
+                  <p class="yes-line" id="yesLine" tabindex="-1"></p>
+                  <p>Dreh das Los um. Auf der Rückseite darfst du bestimmen, wie unser Tag wird.</p>
+                  <button type="button" class="btn btn-primary" id="flipBtn">Los umdrehen</button>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rückseite -->
+        <div class="side back" id="back" hidden>
+          <p class="kicker"><span class="nowrap">Rückseite</span><span class="kdot"> · </span><span class="nowrap">Los-Nr. 1402-2027-ICH-DICH</span></p>
+          <h2 class="display back-title" id="backTitle" tabindex="-1">Gewinn-Einlöseschein</h2>
+          <p>Noch ist nichts geplant – du darfst bestimmen.</p>
+          <p>Kreuz an, was dein Herz sagt. So viele, wie du willst.</p>
+
+          <form class="redeem" id="redeemForm" novalidate>
+            <div class="form-body">
+              <fieldset class="dayset">
+                <legend>Unser Tag</legend>
+                <div class="checks" id="checks"></div>
+                <p class="quip" id="quip" aria-live="polite"></p>
+              </fieldset>
+              <div class="joker">
+                <p class="label">Joker</p>
+                <label for="wish">Dein Sonderwunsch (wird ernst genommen):</label>
+                <textarea id="wish" rows="3" maxlength="140" placeholder="z.&nbsp;B. Pancakes zum Frühstück … oder einfach du."></textarea>
+                <p class="wcount" id="wishCount" aria-live="off">0 / 140</p>
+              </div>
+
+              <svg class="stamp redeem-stamp" id="redeemStamp" viewBox="-30 -30 260 260" aria-hidden="true" focusable="false">
+                <defs>
+                  <filter id="frayInk" x="-6%" y="-6%" width="112%" height="112%">
+                    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="n"/>
+                    <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+                  </filter>
+                  <path id="arcTop" d="M34 100A66 66 0 0 1 166 100"/>
+                  <path id="arcBot" d="M24 100A76 76 0 0 0 176 100"/>
+                </defs>
+                <g filter="url(#frayInk)">
+                  <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" stroke-width="5"/>
+                  <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                  <circle cx="100" cy="100" r="56" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                  <text class="st-display" font-size="21" fill="currentColor" letter-spacing="1"><textPath href="#arcTop" startOffset="50%" text-anchor="middle">EINGELÖST</textPath></text>
+                  <text class="st-mono" font-size="12" fill="currentColor" letter-spacing="2"><textPath href="#arcBot" startOffset="50%" text-anchor="middle">VALENTINSTAG</textPath></text>
+                  <use href="#hp" fill="currentColor" transform="translate(22 94) scale(.4)"/>
+                  <use href="#hp" fill="currentColor" transform="translate(165 94) scale(.4)"/>
+                  <path d="M58 84H142M58 117H142" stroke="currentColor" stroke-width="1.6"/>
+                  <text class="st-mono" x="100" y="106" text-anchor="middle" font-size="16" textLength="92" lengthAdjust="spacingAndGlyphs" fill="currentColor">14.02.2027</text>
+                </g>
+                <g class="drops" fill="currentColor">
+                  <circle cx="205" cy="138" r="3"/><circle cx="162" cy="200" r="2.2"/><circle cx="90" cy="210" r="4"/>
+                  <circle cx="14" cy="172" r="2.6"/><circle cx="-15" cy="104" r="3.6"/><circle cx="3" cy="39" r="2"/>
+                  <circle cx="60" cy="-13" r="3"/><circle cx="140" cy="-12" r="2.4"/><circle cx="190" cy="30" r="4.2"/>
+                  <circle cx="218" cy="80" r="2"/>
+                </g>
+              </svg>
+            </div>
+            <button type="button" class="btn btn-primary" id="redeemBtn">Gewinn einlösen</button>
+          </form>
+
+          <div id="slipWrap" hidden>
+            <div class="cut" id="cutLine" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><circle cx="5.5" cy="6.5" r="3"/><circle cx="5.5" cy="17.5" r="3"/><path d="M8 8.3 21 17M8 15.7 21 7"/></svg>
+              <span>– – – hier abtrennen – – –</span>
+            </div>
+            <div class="slip" id="slip">
+              <h3 class="slip-h" id="slipTitle" tabindex="-1">Kontrollabschnitt · bitte an mich zurück</h3>
+              <dl class="slip-rows" id="slipRows"></dl>
+              <p class="slip-foot">Gültig nur mit dir.</p>
+              <div class="barcode">
+                <svg id="barcode" viewBox="0 0 100 38" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
+                <span id="barcodeNum">1402 2027 0000</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="finale" id="finale" hidden>
+            <p class="love" id="love">
+              <span class="love-text" id="loveText">Ich liebe dich.</span>
+              <svg class="love-line" id="loveLine" viewBox="0 0 240 16" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M6 9C40 5 82 12 124 8S196 4 234 10"/></svg>
+            </p>
+            <div class="finale-rest" id="finaleRest">
+              <p class="finale-text">Jetzt schick mir deinen Abschnitt, damit ich weiß, was ich vorbereiten darf.</p>
+              <a class="btn btn-primary" id="waLink" href="https://wa.me/" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5c-4.97 0-9 3.36-9 7.5 0 2.2 1.14 4.18 2.96 5.55L5 20.5l4.13-2.07c.9.24 1.86.37 2.87.37 4.97 0 9-3.36 9-7.5S16.97 3.5 12 3.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                <span>Abschnitt per WhatsApp schicken</span>
+              </a>
+              <button type="button" class="btn btn-secondary" id="copyBtn">Text kopieren</button>
+              <div class="copybox" id="copyBox" hidden>
+                <textarea id="copyArea" readonly aria-label="Dein Abschnitt als Text"></textarea>
+                <p>Lang drücken zum Kopieren.</p>
+              </div>
+              <div class="textrow">
+                <button type="button" class="textbtn" id="changeBtn">Auswahl ändern</button>
+                <span class="sep" aria-hidden="true">·</span>
+                <button type="button" class="textbtn js-restart">Nochmal von vorn rubbeln</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cd-note" id="cdNote" hidden>
+    <span class="tape" aria-hidden="true"></span>
+    <p class="l1" id="cd1"></p>
+    <p class="l2" id="cd2"></p>
+  </div>
+</main>
+
+<div class="vh" id="sr" aria-live="polite"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const KEY = 'gluecks-los-valentin-2027-v1';
+  const LOSNR = '1402-2027-ICH-DICH';
+  const NS = 'http://www.w3.org/2000/svg';
+  const STAGES = ['front', 'won', 'yes', 'back', 'done'];
+  const WORDS = ['ein ganzer Tag', 'nur wir zwei', 'mit mir'];
+  const PICKS = [
+    ['fruehstueck', 'Ausschlafen & Frühstück im Bett', 'Krümel im Bett sind an dem Tag ausdrücklich erlaubt.'],
+    ['kochen', 'Zusammen kochen', 'Du rührst, ich probier. Oder umgekehrt.'],
+    ['candle', 'Candlelight-Dinner', 'Ich zieh sogar ein Hemd an.'],
+    ['kino', 'Kino', 'Popcorn süß oder salzig? Klären wir noch.'],
+    ['spaziergang', 'Spaziergang Hand in Hand', 'Meine Hand ist schon reserviert. Für dich.'],
+    ['wellness', 'Wellness zu Hause', 'Gesichtsmaske für zwei. Ich halt still.'],
+    ['tanzen', 'Tanzen in der Küche', 'Ich übe schon mal. Heimlich.'],
+    ['ueberrasch', 'Überrasch mich', 'Oh. Okay. Ich lass mir was einfallen.']
+  ];
+  const NO_STEPS = [
+    { h: 'Amtlicher Hinweis', b: 'Eine Ablehnung ist nur schriftlich möglich: in dreifacher Ausfertigung, persönlich bei mir abzugeben. Mit Kuss.', l: 'Trotzdem ablehnen' },
+    { h: 'Bescheid', b: 'Dein Antrag wurde geprüft. Ergebnis: Die Ablehnung wird abgelehnt. (Siehe §2: Umtausch ausgeschlossen.)', l: 'Ganz sicher ablehnen' },
+    { h: 'Letzte Instanz', b: 'Okay. Ich hab für dich mitüberlegt. Ich glaube, du meinst Ja.', l: 'Ja, meine ich' }
+  ];
+  const EASE = 'cubic-bezier(.2,.8,.3,1.08)';
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+  const reduced = () => mq.matches;
+  const smooth = () => (reduced() ? 'auto' : 'smooth');
+  const wait = ms => new Promise(res => setTimeout(res, ms));
+
+  const wrap = $('#wrap'), flipEl = $('#flip'), ticket = $('#ticket'), holo = $('#holo');
+  const front = $('#front'), back = $('#back');
+  const hintEl = $('#hint'), wishEl = $('#wish'), waLink = $('#waLink');
+
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+
+  /* ---------- animation helpers ---------- */
+  function anim(el, kf, opt) {
+    if (!el || typeof el.animate !== 'function') return null;
+    try { return el.animate(kf, opt); } catch (e) { return null; }
+  }
+  const settled = a => (a ? a.finished.then(() => a, () => a) : Promise.resolve(null));
+  const play = (el, kf, opt) => settled(anim(el, kf, opt));
+  const fadeIn = (el, ms = 200) => play(el, [{ opacity: 0 }, { opacity: 1 }], { duration: ms, easing: 'ease-out' });
+  function scrollToEl(el, block) { try { el.scrollIntoView({ behavior: smooth(), block: block || 'start' }); } catch (e) { el.scrollIntoView(); } }
+  function focusEl(el) { if (!el) return; try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); } }
+  function buzz(p) { try { if ('vibrate' in navigator) navigator.vibrate(p); } catch (e) {} }
+
+  let lastAct = -1e9;
+  function guard(ms) { const t = performance.now(); if (t - lastAct < (ms || 450)) return false; lastAct = t; return true; }
+
+  /* ---------- state ---------- */
+  const fresh = () => ({ v: 1, stage: 'front', revealed: [false, false, false], bonus: false, answer: null, picks: [], wish: '' });
+  function load() {
+    let raw = null;
+    try { raw = localStorage.getItem(KEY); } catch (e) { return null; }
+    if (!raw) return null;
+    try {
+      const o = JSON.parse(raw);
+      if (!o || o.v !== 1 || STAGES.indexOf(o.stage) < 0) return null;
+      const s = fresh();
+      s.stage = o.stage;
+      if (Array.isArray(o.revealed)) s.revealed = [0, 1, 2].map(i => o.revealed[i] === true);
+      s.bonus = o.bonus === true;
+      s.answer = (o.answer === 'ja' || o.answer === 'bedenkzeit') ? o.answer : null;
+      s.picks = Array.isArray(o.picks) ? PICKS.map(p => p[0]).filter(id => o.picks.indexOf(id) >= 0) : [];
+      s.wish = typeof o.wish === 'string' ? o.wish.slice(0, 140) : '';
+      const idx = STAGES.indexOf(s.stage);
+      if (idx >= 1) s.revealed = [true, true, true];
+      if (idx >= 2 && !s.answer) s.answer = 'ja';
+      if (s.stage === 'front' && s.revealed.every(Boolean)) s.stage = 'won';
+      return s;
+    } catch (e) { return null; }
+  }
+  const loaded = load();
+  const S = loaded || fresh();
+  const stageIdx = () => STAGES.indexOf(S.stage);
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+    updateWA();
+  }
+  function clearSaved() { try { localStorage.removeItem(KEY); } catch (e) {} }
+
+  /* ---------- screen reader announcements ---------- */
+  const srEl = $('#sr');
+  const srQueue = [];
+  let srBusy = false;
+  function announce(t) { srQueue.push(t); if (!srBusy) pumpSr(); }
+  function pumpSr() {
+    if (!srQueue.length) { srBusy = false; return; }
+    srBusy = true;
+    srEl.textContent = srQueue.shift();
+    setTimeout(pumpSr, 1300);
+  }
+
+  /* ---------- message ---------- */
+  const cleanWish = () => String(S.wish || '').replace(/\s+/g, ' ').trim().slice(0, 140);
+  const pickedLabels = () => PICKS.filter(p => S.picks.indexOf(p[0]) >= 0).map(p => p[1]);
+  function buildMsg() {
+    const labels = pickedLabels();
+    const wish = cleanWish();
+    const lines = [
+      'Mein Glückslos ist eingelöst \u2764\uFE0F',
+      'Hauptgewinn: Ein Valentinstag mit dir',
+      'Wann: Sonntag, 14.02.2027',
+      'Meine Antwort: JA, ich bin deine Valentine.' + (S.answer === 'bedenkzeit' ? ' (Nach sehr kurzer Bedenkzeit.)' : ''),
+      'Unser Tag: ' + (labels.length ? labels.join(', ') : 'Überrasch mich'),
+      'Sonderwunsch: ' + (wish || 'keiner – du reichst mir')
+    ];
+    if (S.bonus) lines.push('Bonusfeld: gefunden – 1 Kuss, sofort fällig');
+    lines.push('Los-Nr. ' + LOSNR + ' · Gültig nur mit dir.');
+    return lines.join('\n');
+  }
+  function updateWA() { if (waLink) waLink.href = 'https://wa.me/?text=' + encodeURIComponent(buildMsg()); }
+
+  /* ---------- guilloche ---------- */
+  function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+  function hypo(R, r, d) {
+    const g = gcd(R, r), T = 2 * Math.PI * r / g, n = (R / g) * 32, k = (R - r) / r;
+    let s = '';
+    for (let i = 0; i <= n; i++) {
+      const t = T * i / n;
+      const x = (R - r) * Math.cos(t) + d * Math.cos(k * t);
+      const y = (R - r) * Math.sin(t) - d * Math.sin(k * t);
+      s += (i ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1);
+    }
+    return s + 'Z';
+  }
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS(NS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function buildGuilloche() {
+    const host = $('#guil');
+    [[70, 13, 40, 'g-r1'], [90, 17, 55, 'g-r2'], [60, 11, 30, 'g-r3']].forEach(([R, r, d, cls]) => {
+      const ext = (R - r) + d + 2;
+      const svg = svgEl('svg', { class: 'guil ' + cls, viewBox: `${-ext} ${-ext} ${ext * 2} ${ext * 2}`, width: ext * 2, height: ext * 2, focusable: 'false' });
+      svg.appendChild(svgEl('path', { d: hypo(R, r, d) }));
+      host.appendChild(svg);
+    });
+    const W = 400, H = 64;
+    const waves = svgEl('svg', { class: 'guil g-waves', viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'none', focusable: 'false' });
+    for (let k = 0; k < 6; k++) {
+      const ph = k * Math.PI / 6;
+      let d = '';
+      for (let x = 0; x <= W; x += 4) {
+        const y = H / 2 + 13 * Math.sin(x / W * Math.PI * 6 + ph) * (0.65 + 0.35 * Math.sin(x / W * Math.PI * 2 + ph * 2));
+        d += (x ? 'L' : 'M') + x + ',' + y.toFixed(1);
+      }
+      waves.appendChild(svgEl('path', { d, 'vector-effect': 'non-scaling-stroke' }));
+    }
+    host.appendChild(waves);
+  }
+
+  /* ---------- hologram ---------- */
+  let hyRaf = 0, hyVal = 30;
+  function queueHy(p) {
+    hyVal = Math.max(0, Math.min(100, p));
+    if (hyRaf) return;
+    hyRaf = requestAnimationFrame(() => { hyRaf = 0; holo.style.setProperty('--hy', hyVal.toFixed(1) + '%'); });
+  }
+  ticket.addEventListener('pointermove', e => queueHy(e.clientY / Math.max(1, window.innerHeight) * 100), { passive: true });
+  window.addEventListener('scroll', () => queueHy(50 + 45 * Math.sin(window.scrollY / 260)), { passive: true });
+  function sweep() {
+    if (reduced()) return;
+    play(holo, [{ backgroundPosition: '0 0%' }, { backgroundPosition: '0 100%' }], { duration: 900, easing: 'ease-in-out' });
+  }
+
+  /* ---------- ticket motion ---------- */
+  function shake() {
+    if (reduced()) return;
+    play(wrap, [{ translate: '0 0' }, { translate: '-3px 0' }, { translate: '3px 0' }, { translate: '-2px 0' }, { translate: '2px 0' }, { translate: '0 0' }], { duration: 240, easing: 'ease-out' });
+  }
+  function tremble() {
+    if (reduced()) return;
+    const kf = [];
+    for (let i = 0; i <= 10; i++) kf.push({ translate: (i === 0 || i === 10) ? '0 0' : `${i % 2 ? 1.5 : -1.5}px ${((i % 3) - 1) * 0.6}px` });
+    play(wrap, kf, { duration: 400, easing: 'linear' });
+  }
+  function rotation() {
+    let a = 0;
+    [wrap, flipEl].forEach(n => {
+      const t = getComputedStyle(n).transform;
+      if (t && t !== 'none') { try { const m = new DOMMatrixReadOnly(t); a += Math.atan2(m.b, m.a); } catch (e) {} }
+    });
+    return a;
+  }
+
+  /* ---------- silver crumbs ---------- */
+  const crumbCv = $('#crumbs'), fieldsEl = $('#fields');
+  let cctx = null, cW = 0, cH = 0, crumbs = [], crumbRaf = 0, crumbT = 0, crumbCols = null;
+  function sizeCrumbs() {
+    cW = fieldsEl.clientWidth; cH = fieldsEl.clientHeight + 40;
+    if (!cW) return false;
+    const d = Math.min(window.devicePixelRatio || 1, 2);
+    crumbCv.width = Math.round(cW * d); crumbCv.height = Math.round(cH * d);
+    crumbCv.style.width = cW + 'px'; crumbCv.style.height = cH + 'px';
+    cctx = crumbCv.getContext('2d');
+    cctx.setTransform(d, 0, 0, d, 0, 0);
+    const cs = getComputedStyle(document.documentElement);
+    crumbCols = ['--silver-lo', '--silver', '--emboss'].map(n => cs.getPropertyValue(n).trim() || '#9AA0A8');
+    return true;
+  }
+  function spawnCrumbs(field, x, y) {
+    if (reduced()) return;
+    if (!cctx && !sizeCrumbs()) return;
+    const ox = field.offsetLeft, oy = field.offsetTop, floor = oy + field.offsetHeight;
+    const now = performance.now();
+    const n = Math.random() < 0.5 ? 1 : 2;
+    for (let i = 0; i < n && crumbs.length < 120; i++) {
+      crumbs.push({
+        x: ox + x, y: oy + y,
+        vx: (Math.random() * 2 - 1) * 0.6, vy: -1 + Math.random() * 1.2,
+        s: 1 + Math.random() * 1.5, c: crumbCols[(Math.random() * 3) | 0],
+        born: now, life: 700 + Math.random() * 400, floor: floor + Math.random() * 14, landed: false
+      });
+    }
+    if (!crumbRaf) { crumbT = now; crumbRaf = requestAnimationFrame(crumbTick); }
+  }
+  function crumbTick(t) {
+    const dt = Math.min(3, Math.max(0, (t - crumbT) / 16.67));
+    crumbT = t;
+    cctx.clearRect(0, 0, cW, cH);
+    crumbs = crumbs.filter(p => t - p.born < p.life);
+    for (const p of crumbs) {
+      if (!p.landed) {
+        p.vy += 0.25 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+        if (p.y >= p.floor) { p.y = p.floor; p.landed = true; }
+      }
+      const left = p.life - (t - p.born);
+      cctx.globalAlpha = left < 300 ? Math.max(0, left / 300) : 1;
+      cctx.fillStyle = p.c;
+      cctx.fillRect(p.x - p.s / 2, p.y - p.s / 2, p.s, p.s);
+    }
+    cctx.globalAlpha = 1;
+    if (crumbs.length) crumbRaf = requestAnimationFrame(crumbTick);
+    else { crumbRaf = 0; cctx.clearRect(0, 0, cW, cH); }
+  }
+
+  /* ---------- scratch engine ---------- */
+  function makeScratch(el, o) {
+    const cv = $('canvas.silver', el), prize = $('.prize', el);
+    const ctx = cv.getContext('2d');
+    const off = document.createElement('canvas');
+    let octx = null, w = 0, h = 0, touched = false, done = false, pid = null, last = null, geo = null;
+    let lastCheck = 0, lastBuzz = 0, kb = 0;
+
+    function size() {
+      w = el.clientWidth; h = el.clientHeight;
+      if (!w || !h) return false;
+      const d = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(w * d); cv.height = Math.round(h * d);
+      ctx.setTransform(d, 0, 0, d, 0, 0);
+      off.width = 48; off.height = Math.max(8, Math.round(48 * h / w));
+      return true;
+    }
+    function prep() {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = o.brush; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#000'; ctx.fillStyle = '#000';
+    }
+    function textW(s, sp) { let t = 0; for (const ch of s) t += ctx.measureText(ch).width + sp; return t - sp; }
+    function wrapLines(phrases, maxW, sp) {
+      const out = []; let cur = '';
+      const addWord = word => {
+        const cand = cur ? cur + ' ' + word : word;
+        if (!cur || textW(cand, sp) <= maxW) cur = cand; else { out.push(cur); cur = word; }
+      };
+      phrases.forEach(ph => {
+        const cand = cur ? cur + ' · ' + ph : ph;
+        if (textW(cand, sp) <= maxW) { cur = cand; return; }
+        if (cur) { out.push(cur); cur = ''; }
+        if (textW(ph, sp) <= maxW) cur = ph; else ph.split(' ').forEach(addWord);
+      });
+      if (cur) out.push(cur);
+      return out;
+    }
+    function spaced(s, cx, y, sp) {
+      let x = cx - textW(s, sp) / 2;
+      for (const ch of s) { ctx.fillText(ch, x, y); x += ctx.measureText(ch).width + sp; }
+    }
+    function paint() {
+      const cs = getComputedStyle(document.documentElement);
+      const v = n => cs.getPropertyValue(n).trim();
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, w, h);
+      const g = ctx.createLinearGradient(0, 0, w, h);
+      g.addColorStop(0, v('--silver-hi')); g.addColorStop(0.45, v('--silver-lo'));
+      g.addColorStop(0.55, v('--silver')); g.addColorStop(1, v('--silver-hi'));
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+      if (o.heavy) { ctx.fillStyle = 'rgba(55,60,70,.12)'; ctx.fillRect(0, 0, w, h); }
+      const specks = Math.round(w * h / 18 * (o.heavy ? 1.4 : 1));
+      for (let i = 0; i < specks; i++) {
+        const a = (0.05 + Math.random() * 0.07).toFixed(3);
+        ctx.fillStyle = (i & 1) ? `rgba(255,255,255,${a})` : `rgba(0,0,0,${a})`;
+        ctx.fillRect(Math.random() * w, Math.random() * h, 1, 1);
+      }
+      ctx.strokeStyle = 'rgba(255,255,255,.08)'; ctx.lineWidth = 1;
+      for (let i = 0; i < 40; i++) {
+        const x = Math.random() * (w + h) - h;
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + h * 0.7, h); ctx.stroke();
+      }
+      ctx.font = '700 15px "Courier Prime", "Courier New", monospace';
+      ctx.textBaseline = 'middle';
+      const lines = wrapLines(o.emboss, w - 22, 2);
+      const lh = 20, y0 = h / 2 - (lines.length - 1) * lh / 2;
+      lines.forEach((ln, k) => {
+        const y = y0 + k * lh;
+        ctx.fillStyle = 'rgba(255,255,255,.5)'; spaced(ln, w / 2 + 1, y + 1, 2);
+        ctx.fillStyle = v('--emboss'); spaced(ln, w / 2, y, 2);
+      });
+      ctx.restore();
+      prep();
+    }
+    function setup() { if (!done && size()) paint(); }
+    function measure() {
+      const r = cv.getBoundingClientRect(), a = rotation();
+      return { cx: r.left + r.width / 2, cy: r.top + r.height / 2, c: Math.cos(-a), s: Math.sin(-a) };
+    }
+    function loc(e) {
+      const dx = e.clientX - geo.cx, dy = e.clientY - geo.cy;
+      return { x: dx * geo.c - dy * geo.s + w / 2, y: dx * geo.s + dy * geo.c + h / 2 };
+    }
+    function ratio() {
+      if (!octx) octx = off.getContext('2d', { willReadFrequently: true });
+      octx.clearRect(0, 0, off.width, off.height);
+      octx.drawImage(cv, 0, 0, off.width, off.height);
+      const d = octx.getImageData(0, 0, off.width, off.height).data;
+      let n = 0;
+      for (let i = 3; i < d.length; i += 4) if (d[i] < 40) n++;
+      return n / (d.length / 4);
+    }
+    function check() { if (!done && w && ratio() >= o.threshold) reveal({ animate: true, notify: true }); }
+    function begin() { touched = true; if (o.onStart) o.onStart(); }
+    function band(k) {
+      const y0 = k * h / 3 - (k ? 7 : 0), y1 = (k + 1) * h / 3;
+      ctx.beginPath(); ctx.moveTo(0, y0); ctx.lineTo(w, y0); ctx.lineTo(w, y1);
+      let x = w, up = false;
+      while (x > 0) { x -= 11; ctx.lineTo(Math.max(0, x), y1 + (up ? -5 : 5)); up = !up; }
+      ctx.lineTo(0, y0); ctx.closePath(); ctx.fill();
+    }
+
+    cv.addEventListener('pointerdown', e => {
+      if (done || pid !== null) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (!w && !size()) return;
+      pid = e.pointerId;
+      try { cv.setPointerCapture(pid); } catch (err) {}
+      geo = measure(); begin(); prep();
+      last = loc(e);
+      ctx.beginPath(); ctx.arc(last.x, last.y, o.brush / 2, 0, Math.PI * 2); ctx.fill();
+      if (o.onMove) o.onMove(last.x, last.y);
+      e.preventDefault();
+    });
+    cv.addEventListener('pointermove', e => {
+      if (e.pointerId !== pid || done) return;
+      let evs = (typeof e.getCoalescedEvents === 'function' && e.getCoalescedEvents()) || [];
+      if (!evs.length) evs = [e];
+      ctx.beginPath(); ctx.moveTo(last.x, last.y);
+      for (const ev of evs) { const p = loc(ev); ctx.lineTo(p.x, p.y); last = p; }
+      ctx.stroke();
+      if (o.onMove) o.onMove(last.x, last.y);
+      const t = performance.now();
+      if (t - lastBuzz > 90) { lastBuzz = t; buzz(5); }
+      if (t - lastCheck > 120) { lastCheck = t; check(); }
+    });
+    const end = e => { if (e.pointerId !== pid) return; pid = null; check(); };
+    cv.addEventListener('pointerup', end);
+    cv.addEventListener('pointercancel', end);
+    cv.addEventListener('lostpointercapture', end);
+
+    el.addEventListener('keydown', e => {
+      if (done) return;
+      if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+      e.preventDefault();
+      if (e.repeat) return;
+      if (!w && !size()) return;
+      begin(); prep();
+      band(kb); kb++;
+      if (kb >= 3) reveal({ animate: true, notify: true });
+    });
+
+    function reveal(opt) {
+      if (done) return;
+      done = true; pid = null;
+      try { const sel = window.getSelection && window.getSelection(); if (sel && sel.rangeCount) sel.removeAllRanges(); } catch (e) {}
+      const had = document.activeElement === el;
+      prize.setAttribute('aria-hidden', 'false');
+      el.removeAttribute('role'); el.removeAttribute('tabindex'); el.removeAttribute('aria-label');
+      el.classList.add('is-open');
+      cv.style.pointerEvents = 'none';
+      const rm = () => cv.remove();
+      const a = opt.animate ? anim(cv, reduced()
+        ? [{ opacity: 1 }, { opacity: 0 }]
+        : [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(6px)' }],
+        { duration: reduced() ? 200 : 350, easing: 'ease-out', fill: 'forwards' }) : null;
+      if (a) { a.finished.then(rm, rm); if (!reduced()) anim(prize, [{ transform: 'scale(.92)' }, { transform: 'scale(1)' }], { duration: 260, easing: EASE }); }
+      else rm();
+      if (opt.notify && o.onReveal) o.onReveal(had);
+    }
+
+    return {
+      el, reveal, setup,
+      isDone: () => done,
+      repaint() { if (!touched && !done && size()) paint(); },
+      resize() { if (done) return; const nw = el.clientWidth; if (nw && nw !== w) { setup(); kb = 0; } }
+    };
+  }
+
+  /* ---------- front: fields ---------- */
+  const fieldEls = [$('#f1'), $('#f2'), $('#f3')];
+  let firstTouch = false, winStarted = false;
+  function onStart() { if (firstTouch) return; firstTouch = true; $('#scratchHint').classList.add('gone'); }
+  function setHint(t) {
+    hintEl.textContent = t;
+    if (t && !reduced()) play(hintEl, [{ opacity: 0, transform: 'rotate(-1.5deg) translateY(4px)' }, { opacity: 1, transform: 'rotate(-1.5deg)' }], { duration: 220, easing: 'ease-out' });
+  }
+  function nextFocusAfter(i) {
+    for (let k = 1; k <= 3; k++) { const f = fieldEls[(i + k) % 3]; if (f.hasAttribute('tabindex')) { f.focus(); return; } }
+    focusEl($('#rulesTitle'));
+  }
+  function fieldRevealed(i, had) {
+    onStart();
+    S.revealed[i] = true;
+    save();
+    const n = S.revealed.filter(Boolean).length;
+    announce(`Feld ${i + 1}: ein Herz – ${WORDS[i]}.`);
+    if (n === 1) setHint('Oh. Ein Herz. Mal sehen …');
+    else if (n === 2) { setHint('Zwei Herzen. Jetzt wird’s spannend.'); tremble(); }
+    else { setHint(''); startWin(); }
+    if (had) nextFocusAfter(i);
+  }
+  const scratchers = fieldEls.map((el, i) => makeScratch(el, {
+    brush: i === 2 ? 22 : 30,
+    threshold: i === 2 ? 0.65 : 0.55,
+    heavy: i === 2,
+    emboss: i === 2 ? ['EXTRA DICK', 'FESTER RUBBELN'] : ['HIER RUBBELN'],
+    onStart,
+    onMove: (x, y) => spawnCrumbs(el, x, y),
+    onReveal: had => fieldRevealed(i, had)
+  }));
+  const bonusScratch = makeScratch($('#bonus'), {
+    brush: 24, threshold: 0.5, emboss: ['BONUS'],
+    onReveal: had => bonusRevealed(had)
+  });
+
+  $('#revealAll').addEventListener('click', async e => {
+    const btn = e.currentTarget;
+    if (btn.disabled) return;
+    btn.disabled = true;
+    const rest = [0, 1, 2].filter(i => !scratchers[i].isDone());
+    for (let k = 0; k < rest.length; k++) {
+      scratchers[rest[k]].reveal({ animate: true, notify: true });
+      if (k < rest.length - 1 && !reduced()) await wait(250);
+    }
+  });
+
+  /* ---------- coin ---------- */
+  function placeCoin() {
+    const src = $('#coinBtn .coin');
+    if (!src) return null;
+    const deco = src.cloneNode(true);
+    deco.setAttribute('class', 'coin coin-deco');
+    $('#f1').appendChild(deco);
+    return deco;
+  }
+  $('#coinBtn').addEventListener('click', () => {
+    if (!guard()) return;
+    const btn = $('#coinBtn');
+    const src = $('.coin', btn).getBoundingClientRect();
+    const deco = placeCoin();
+    btn.remove();
+    if (deco) {
+      const dst = deco.getBoundingClientRect();
+      if (reduced()) fadeIn(deco, 200);
+      else {
+        const dx = (src.left + src.width / 2) - (dst.left + dst.width / 2);
+        const dy = (src.top + src.height / 2) - (dst.top + dst.height / 2);
+        const s0 = src.width / Math.max(1, dst.width);
+        const cx = dx * 0.5, cy = Math.min(dy, 0) - 90;
+        const kf = [];
+        for (let k = 0; k <= 14; k++) {
+          const t = k / 14, u = 1 - t;
+          const x = u * u * dx + 2 * u * t * cx, y = u * u * dy + 2 * u * t * cy;
+          const sc = s0 + (1 - s0) * t, rot = 15 - 360 * u;
+          kf.push({ transform: `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${sc.toFixed(3)}) rotate(${rot.toFixed(1)}deg)` });
+        }
+        anim(deco, kf, { duration: 720, easing: 'cubic-bezier(.3,.7,.4,1)' });
+      }
+    }
+    const target = fieldEls.find(f => f.hasAttribute('tabindex'));
+    if (target) { focusEl(target); scrollToEl($('#rulesTitle'), 'start'); }
+    else focusEl($('#rulesTitle'));
+  });
+
+  /* ---------- stamps ---------- */
+  function slam(st, rot, rot0) {
+    st.classList.add('on');
+    const drops = $('.drops', st);
+    if (reduced()) {
+      drops.classList.add('on');
+      return play(st, [{ opacity: 0 }, { opacity: 0.9 }], { duration: 200, easing: 'ease-out' });
+    }
+    const base = 'translate(-50%,-50%)';
+    const a = play(st, [
+      { transform: `${base} scale(1.6) rotate(${rot0}deg)`, opacity: 0 },
+      { offset: 0.7, transform: `${base} scale(.96) rotate(${rot}deg)`, opacity: 0.95 },
+      { transform: `${base} scale(1) rotate(${rot}deg)`, opacity: 0.9 }
+    ], { duration: 320, easing: 'cubic-bezier(.3,.7,.4,1)' });
+    setTimeout(() => {
+      drops.classList.add('on');
+      $$('circle', drops).forEach((c, i) => anim(c, [{ transform: 'scale(0)' }, { transform: 'scale(1)' }], { duration: 120, delay: i * 6, easing: 'cubic-bezier(.2,.8,.3,1.4)', fill: 'backwards' }));
+      shake(); sweep(); buzz([15, 30, 25]);
+    }, 224);
+    return a;
+  }
+
+  /* ---------- S3 / S4 ---------- */
+  function startWin() {
+    if (winStarted) return;
+    winStarted = true;
+    $('#revealAll').hidden = true;
+    if (S.stage === 'front') { S.stage = 'won'; save(); }
+    setTimeout(() => {
+      announce('Drei Herzen. Hauptgewinn!');
+      slam($('#winStamp'), -8, -14);
+      setTimeout(() => openNotice(true), reduced() ? 450 : 900);
+    }, 250);
+  }
+  function openNotice(animated) {
+    const n = $('#notice');
+    n.classList.add('open');
+    if (!animated) { n.classList.add('opened'); return; }
+    if (reduced()) fadeIn($('#noticeInner'), 200);
+    setTimeout(() => {
+      n.classList.add('opened');
+      bonusScratch.setup();
+      const h = $('#winTitle');
+      scrollToEl(h, 'start');
+      focusEl(h);
+    }, reduced() ? 220 : 640);
+  }
+  function bonusRevealed(had) {
+    S.bonus = true;
+    save();
+    const note = $('#bonusNote');
+    note.hidden = false;
+    if (reduced()) fadeIn(note);
+    else play(note, [{ opacity: 0, transform: 'rotate(-4deg) translateY(5px)' }, { opacity: 1, transform: 'rotate(-4deg)' }], { duration: 260, easing: EASE });
+    announce('Bonusfeld: 1 Kuss, sofort einlösbar.');
+    if (had) focusEl($('#terms summary'));
+  }
+
+  /* ---------- Ja / Nein ---------- */
+  let noCount = 0, answered = false;
+  const noBtn = $('#noBtn'), noNotice = $('#noNotice');
+  $('#yesBtn').addEventListener('click', () => { if (!guard()) return; acceptYes(noCount > 0 ? 'bedenkzeit' : 'ja'); });
+  noBtn.addEventListener('click', () => {
+    if (!guard(350)) return;
+    if (noCount >= 3) { acceptYes('bedenkzeit'); return; }
+    const st = NO_STEPS[noCount++];
+    noNotice.textContent = '';
+    const h = document.createElement('p'); h.className = 'nh'; h.textContent = st.h;
+    const b = document.createElement('p'); b.className = 'nb'; b.textContent = st.b;
+    noNotice.append(h, b);
+    noNotice.classList.add('on');
+    requestAnimationFrame(() => {
+      const r = noNotice.getBoundingClientRect();
+      const over = r.bottom - (window.innerHeight - 16);
+      if (over > 0) window.scrollBy({ top: over, behavior: smooth() });
+    });
+    noBtn.textContent = st.l;
+    if (noCount === 3) { noBtn.classList.remove('btn-secondary'); noBtn.classList.add('btn-primary'); }
+    if (!reduced()) play(noNotice, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(2deg)' }, { transform: 'rotate(-1deg)' }, { transform: 'rotate(0deg)' }], { duration: 200, easing: 'ease-out' });
+  });
+  function acceptYes(answer) {
+    if (answered) return;
+    answered = true;
+    S.answer = answer;
+    S.stage = 'yes';
+    save();
+    renderYes(true);
+  }
+  function renderYes(animated) {
+    $('#answerZone').hidden = true;
+    const line = $('#yesLine');
+    line.textContent = S.answer === 'bedenkzeit' ? 'Gute Entscheidung. Hat ja nur kurz gedauert.' : 'Wusste ich’s doch.';
+    const yb = $('#yesBlock');
+    yb.hidden = false;
+    if (!animated) return;
+    sweep();
+    if (reduced()) fadeIn(yb);
+    else play(yb, [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: EASE });
+    focusEl(line);
+    scrollToEl(line, 'center');
+  }
+
+  /* ---------- flip ---------- */
+  let flipping = false;
+  function showBack() { front.hidden = true; back.hidden = false; ticket.classList.add('is-back'); }
+  function jumpToTicket() {
+    const r = wrap.getBoundingClientRect();
+    window.scrollTo({ top: Math.max(0, r.top + window.scrollY - 16), behavior: 'auto' });
+  }
+  function originAtViewCenter() {
+    const r = flipEl.getBoundingClientRect();
+    const y = Math.max(0, Math.min(r.height, window.innerHeight / 2 - r.top));
+    flipEl.style.transformOrigin = `50% ${Math.round(y)}px`;
+  }
+  $('#flipBtn').addEventListener('click', () => { if (!guard()) return; flip(); });
+  async function flip() {
+    if (flipping) return;
+    flipping = true;
+    S.stage = 'back';
+    save();
+    if (reduced() || typeof flipEl.animate !== 'function') {
+      const a = anim(flipEl, [{ opacity: 1 }, { opacity: 0 }], { duration: 100, fill: 'forwards' });
+      await settled(a);
+      showBack(); jumpToTicket();
+      const b = anim(flipEl, [{ opacity: 0 }, { opacity: 1 }], { duration: 150, easing: 'ease-out' });
+      if (a) a.cancel();
+      await settled(b);
+    } else {
+      originAtViewCenter();
+      const a = anim(flipEl, [{ transform: 'perspective(1400px) rotateY(0deg)' }, { transform: 'perspective(1400px) rotateY(90deg)' }], { duration: 280, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
+      await settled(a);
+      showBack(); jumpToTicket(); originAtViewCenter();
+      const b = anim(flipEl, [{ transform: 'perspective(1400px) rotateY(-90deg)' }, { transform: 'perspective(1400px) rotateY(0deg)' }], { duration: 340, easing: 'cubic-bezier(.2,.7,.3,1.1)' });
+      if (a) a.cancel();
+      await settled(b);
+      flipEl.style.transformOrigin = '';
+    }
+    focusEl($('#backTitle'));
+    flipping = false;
+  }
+
+  /* ---------- S6 form ---------- */
+  const BOX = '<svg viewBox="0 0 30 30" aria-hidden="true" focusable="false"><path class="sq" d="M4.2 4.8C10 4.1 18.5 4.6 25.6 3.9 26.2 11 25.7 18.4 26.3 25.8 18.6 26.4 11 25.6 3.7 26.2 4.3 18.7 3.6 11.2 4.2 4.8Z"/><path class="x x1" d="M8.4 8.6C12.2 12.4 16.6 17.1 21.9 21.8"/><path class="x x2" d="M21.6 8.1C17.4 12.6 13 16.9 8 21.9"/></svg>';
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const checksEl = $('#checks');
+  checksEl.innerHTML = PICKS.map(([id, label]) =>
+    `<label class="chk" for="${id}"><input type="checkbox" id="${id}" name="unser-tag" value="${id}"><span class="box">${BOX}</span><span>${esc(label)}</span></label>`
+  ).join('');
+  const quipEl = $('#quip');
+  function readPicks() { S.picks = PICKS.map(p => p[0]).filter(id => { const c = document.getElementById(id); return c && c.checked; }); }
+  checksEl.addEventListener('change', e => {
+    const cb = e.target;
+    if (!cb || cb.type !== 'checkbox') return;
+    readPicks();
+    save();
+    if (cb.checked) {
+      const p = PICKS.find(x => x[0] === cb.value);
+      if (p) {
+        quipEl.textContent = p[2];
+        if (!reduced()) play(quipEl, [{ opacity: 0, transform: 'rotate(-1.5deg) translateX(-6px)' }, { opacity: 1, transform: 'rotate(-1.5deg)' }], { duration: 200, easing: 'ease-out' });
+      }
+    }
+  });
+  let wishT = 0;
+  function updateCount() { $('#wishCount').textContent = wishEl.value.length + ' / 140'; }
+  wishEl.addEventListener('input', () => {
+    updateCount();
+    S.wish = wishEl.value;
+    clearTimeout(wishT);
+    wishT = setTimeout(save, 300);
+  });
+  $('#redeemForm').addEventListener('submit', e => e.preventDefault());
+  function lockForm(lock) {
+    $$('input', checksEl).forEach(i => { i.disabled = lock; });
+    wishEl.disabled = lock;
+    $('#redeemForm').classList.toggle('is-locked', lock);
+  }
+
+  /* ---------- S7 / S8 / S9 ---------- */
+  let redeeming = false;
+  $('#redeemBtn').addEventListener('click', () => { if (!guard()) return; redeem(); });
+  async function redeem() {
+    if (redeeming) return;
+    redeeming = true;
+    clearTimeout(wishT);
+    readPicks();
+    S.wish = wishEl.value;
+    S.stage = 'done';
+    save();
+    lockForm(true);
+    $('#redeemBtn').hidden = true;
+    const st = $('#redeemStamp');
+    const r = st.getBoundingClientRect();
+    if (r.top < 8 || r.bottom > window.innerHeight - 8) {
+      scrollToEl(st, 'center');
+      await wait(reduced() ? 30 : 450);
+    }
+    announce('Eingelöst.');
+    slam(st, 12, 18);
+    await wait(reduced() ? 260 : 760);
+    await printSlip(true);
+    await runFinale(true);
+  }
+
+  function fnv1a(str) {
+    let h = 0x811c9dc5;
+    let bytes;
+    try { bytes = new TextEncoder().encode(str); } catch (e) { bytes = Array.from(str, c => c.charCodeAt(0) & 255); }
+    for (let i = 0; i < bytes.length; i++) { h ^= bytes[i]; h = Math.imul(h, 0x01000193) >>> 0; }
+    return h >>> 0;
+  }
+  function mulberry32(a) {
+    return () => {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function drawBarcode(msg) {
+    const hash = fnv1a(msg), rnd = mulberry32(hash);
+    let x = 0, rects = '';
+    for (let i = 0; i < 42; i++) {
+      const bw = 1 + Math.floor(rnd() * 3);
+      rects += `<rect x="${x}" y="0" width="${bw}" height="38"/>`;
+      x += bw;
+      if (i < 41) x += 1 + Math.floor(rnd() * 2);
+    }
+    const svg = $('#barcode');
+    svg.setAttribute('viewBox', `0 0 ${x} 38`);
+    svg.innerHTML = rects;
+    $('#barcodeNum').textContent = '1402 2027 ' + (hash >>> 16).toString(16).toUpperCase().padStart(4, '0');
+  }
+  function fillSlip() {
+    const dl = $('#slipRows');
+    dl.textContent = '';
+    const add = (label, vals) => {
+      const row = document.createElement('div'); row.className = 'srow';
+      const dt = document.createElement('dt'); dt.textContent = label;
+      const dd = document.createElement('dd');
+      (Array.isArray(vals) ? vals : [vals]).forEach(v => {
+        const s = document.createElement('span');
+        if (v && typeof v === 'object') s.append(...v.parts); else s.textContent = v;
+        dd.appendChild(s);
+      });
+      row.append(dt, dd);
+      dl.appendChild(row);
+    };
+    const caps = t => { const c = document.createElement('span'); c.className = 'caps'; c.textContent = t; return c; };
+    add('Los-Nr.', LOSNR);
+    add('Status', { parts: [caps('Eingelöst')] });
+    add('Antwort', { parts: S.answer === 'bedenkzeit' ? [caps('Ja'), ' (nach kurzer Bedenkzeit)'] : [caps('Ja')] });
+    add('Datum', 'So, 14.02.2027');
+    const labels = pickedLabels();
+    add('Unser Tag', labels.length ? labels : ['Überrasch mich']);
+    add('Sonderwunsch', cleanWish() || 'keiner – du reichst mir');
+    if (S.bonus) add('Bonus', '1 Kuss, sofort fällig');
+    drawBarcode(buildMsg());
+  }
+  async function printSlip(animated) {
+    fillSlip();
+    updateWA();
+    const sw = $('#slipWrap');
+    sw.hidden = false;
+    if (!animated) return;
+    const title = $('#slipTitle');
+    scrollToEl(sw, 'start');
+    focusEl(title);
+    if (reduced()) { await play(sw, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, easing: 'ease-out' }); return; }
+    const parts = [$('#cutLine'), title].concat($$('#slipRows > .srow'), [$('.slip-foot'), $('.barcode')]);
+    const total = parts.length * 70 + 90;
+    anim($('#slip'), [{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: total, easing: `steps(${parts.length}, end)` });
+    parts.forEach((p, i) => anim(p, [{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: 90, delay: i * 70, easing: 'steps(3, end)', fill: 'backwards' }));
+    await wait(total + 40);
+  }
+  let noteOn = false;
+  function daysLeft() {
+    const t = new Date(2027, 1, 14), n = new Date();
+    const d0 = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+    return Math.round((t - d0) / 86400000);
+  }
+  function renderNote(d) {
+    const l1 = $('#cd1'), l2 = $('#cd2');
+    if (d > 1) {
+      const num = document.createElement('span'); num.className = 'num'; num.textContent = String(d);
+      l1.textContent = ''; l1.append('Noch ', num, ' Tage. Ich zähl mit.');
+      l2.textContent = 'Nicht aus Ungeduld. Okay, ein bisschen aus Ungeduld.';
+    }
+    else if (d === 1) { l1.textContent = 'Morgen ist es so weit.'; l2.textContent = 'Ich zähl jetzt die Stunden.'; }
+    else { l1.textContent = 'Heute ist es so weit.'; l2.textContent = 'Ich freu mich auf dich.'; }
+  }
+  function showNote(animated) {
+    const n = $('#cdNote');
+    const d = daysLeft();
+    noteOn = true;
+    if (d < 0) { n.hidden = true; return; }
+    renderNote(d);
+    n.hidden = false;
+    if (!animated) return;
+    if (reduced()) fadeIn(n);
+    else play(n, [{ opacity: 0, transform: 'translateY(-12px) rotate(7deg)' }, { opacity: 1, transform: 'rotate(3deg)' }], { duration: 420, delay: 900, easing: EASE, fill: 'backwards' });
+  }
+  async function runFinale(animated) {
+    const f = $('#finale');
+    updateWA();
+    f.hidden = false;
+    showNote(animated);
+    if (!animated) return;
+    scrollToEl($('#love'), 'center');
+    if (reduced()) { await play(f, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, easing: 'ease-out' }); return; }
+    const text = $('#loveText'), line = $('#loveLine path'), rest = $('#finaleRest');
+    let len = 240;
+    try { len = line.getTotalLength() || 240; } catch (e) {}
+    line.style.strokeDasharray = len;
+    const r0 = anim(rest, [{ opacity: 0 }, { opacity: 0 }], { duration: 1500, fill: 'both' });
+    anim(line, [{ strokeDashoffset: len }, { strokeDashoffset: len }], { duration: 1100, fill: 'both' });
+    await play(text, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)' }], { duration: 1100, easing: 'ease-out' });
+    line.getAnimations && line.getAnimations().forEach(a => a.cancel());
+    await play(line, [{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 300, easing: 'ease-out' });
+    if (r0) r0.cancel();
+    play(rest, [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: EASE });
+    setTimeout(() => { try { waLink.scrollIntoView({ behavior: smooth(), block: 'nearest' }); } catch (e) {} }, 60);
+  }
+
+  /* ---------- share ---------- */
+  waLink.addEventListener('click', () => updateWA());
+  let toastT = 0;
+  function toast(t) {
+    const el = $('#toast');
+    el.textContent = t;
+    requestAnimationFrame(() => el.classList.add('on'));
+    clearTimeout(toastT);
+    toastT = setTimeout(() => {
+      el.classList.remove('on');
+      setTimeout(() => { if (!el.classList.contains('on')) el.textContent = ''; }, 260);
+    }, 2400);
+  }
+  $('#copyBtn').addEventListener('click', async () => {
+    const btn = $('#copyBtn');
+    const msg = buildMsg();
+    let ok = false;
+    try {
+      if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(msg); ok = true; }
+    } catch (e) { ok = false; }
+    if (!ok) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = msg;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:-1000px;left:0;opacity:0;font-size:16px';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, msg.length);
+        ok = document.execCommand('copy');
+        ta.remove();
+        focusEl(btn);
+      } catch (e) { ok = false; }
+    }
+    if (ok) { toast('Kopiert! Jetzt einfach in unseren Chat einfügen.'); return; }
+    const box = $('#copyBox'), area = $('#copyArea');
+    area.value = msg;
+    box.hidden = false;
+    area.focus();
+    area.select();
+    try { area.setSelectionRange(0, msg.length); } catch (e) {}
+  });
+
+  $('#changeBtn').addEventListener('click', () => {
+    if (!guard()) return;
+    S.stage = 'back';
+    save();
+    const st = $('#redeemStamp');
+    const a = anim(st, [{ opacity: 0.9 }, { opacity: 0 }], { duration: 200, fill: 'forwards' });
+    settled(a).then(() => { st.classList.remove('on'); $('.drops', st).classList.remove('on'); if (a) a.cancel(); });
+    lockForm(false);
+    $('#redeemBtn').hidden = false;
+    $('#slipWrap').hidden = true;
+    $('#finale').hidden = true;
+    $('#copyBox').hidden = true;
+    $('#cdNote').hidden = true;
+    $('#welcome').hidden = true;
+    noteOn = false;
+    redeeming = false;
+    const h = $('#backTitle');
+    scrollToEl(h, 'start');
+    focusEl(h);
+  });
+  $$('.js-restart').forEach(b => b.addEventListener('click', () => { clearSaved(); location.reload(); }));
+
+  /* ---------- countdown ---------- */
+  function renderCountdown() {
+    const d = daysLeft();
+    const row = $('#ticketCountdown');
+    if (row) {
+      if (d < 0) row.remove();
+      else {
+        $('dt', row).textContent = d > 1 ? 'Einlösung in:' : 'Einlösung:';
+        $('dd', row).textContent = d > 1 ? d + ' Tagen' : (d === 1 ? 'morgen' : 'heute!');
+      }
+    }
+    if (noteOn) {
+      if (d < 0) $('#cdNote').hidden = true;
+      else renderNote(d);
+    }
+  }
+  function scheduleMidnight() {
+    const n = new Date();
+    const next = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 2);
+    setTimeout(() => { renderCountdown(); scheduleMidnight(); }, Math.max(1000, next - n));
+  }
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') renderCountdown(); });
+
+  /* ---------- restore ---------- */
+  function restore() {
+    const idx = stageIdx();
+    const any = S.revealed.some(Boolean);
+    if (idx >= 1 || any) { placeCoin(); const b = $('#coinBtn'); if (b) b.remove(); }
+    S.revealed.forEach((r, i) => { if (r) scratchers[i].reveal({ animate: false, notify: false }); });
+    if (any) { firstTouch = true; $('#scratchHint').classList.add('gone'); }
+    const n = S.revealed.filter(Boolean).length;
+    if (idx === 0) {
+      if (n === 1) hintEl.textContent = 'Oh. Ein Herz. Mal sehen …';
+      else if (n === 2) hintEl.textContent = 'Zwei Herzen. Jetzt wird’s spannend.';
+    }
+    if (idx >= 1) {
+      winStarted = true;
+      $('#revealAll').hidden = true;
+      const ws = $('#winStamp');
+      ws.classList.add('on'); $('.drops', ws).classList.add('on');
+      openNotice(false);
+      if (S.bonus) { bonusScratch.reveal({ animate: false, notify: false }); $('#bonusNote').hidden = false; }
+    }
+    if (idx >= 2) { answered = true; renderYes(false); }
+    PICKS.forEach(([id]) => { const c = document.getElementById(id); if (c) c.checked = S.picks.indexOf(id) >= 0; });
+    wishEl.value = S.wish || '';
+    updateCount();
+    if (idx >= 3) showBack();
+    if (idx === 4) {
+      lockForm(true);
+      $('#redeemBtn').hidden = true;
+      const rs = $('#redeemStamp');
+      rs.classList.add('on'); $('.drops', rs).classList.add('on');
+      printSlip(false);
+      runFinale(false);
+      $('#welcome').hidden = false;
+    }
+  }
+
+  /* ---------- init ---------- */
+  document.documentElement.classList.add('static');
+  buildGuilloche();
+  scratchers.forEach(s => s.setup());
+  bonusScratch.setup();
+  restore();
+  renderCountdown();
+  scheduleMidnight();
+  updateWA();
+  requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove('static')));
+
+  if (!loaded || (stageIdx() === 0 && !S.revealed.some(Boolean))) {
+    if (reduced()) anim(wrap, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, delay: 150, easing: 'ease-out', fill: 'backwards' });
+    else {
+      const tilt = (getComputedStyle(wrap).getPropertyValue('--tilt') || '').trim() || '-1deg';
+      anim(wrap, [{ transform: 'translateX(110%) rotate(6deg)' }, { transform: `translateX(0) rotate(${tilt})` }], { duration: 700, delay: 150, easing: EASE, fill: 'backwards' });
+    }
+  }
+
+  const fontWait = (document.fonts && document.fonts.ready)
+    ? Promise.all([document.fonts.ready, document.fonts.load('700 15px "Courier Prime"').catch(() => null)])
+    : Promise.resolve();
+  Promise.race([fontWait, wait(1500)]).then(() => { scratchers.forEach(s => s.repaint()); bonusScratch.repaint(); }, () => {});
+
+  let rzT = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(rzT);
+    rzT = setTimeout(() => {
+      scratchers.forEach(s => s.resize());
+      bonusScratch.resize();
+      if (cctx) sizeCrumbs();
+    }, 150);
+  });
+})();
+</script>
+</body>
 </html>
